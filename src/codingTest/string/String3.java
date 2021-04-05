@@ -10,6 +10,7 @@ public class String3 {
         String firstStr = str[0];
 
         for (int i = 1; i < str.length; i++) {
+            //test -> tes -> te
             while (str[i].indexOf(firstStr) != 0) {
                 firstStr = firstStr.substring(0, firstStr.length() - 1);
             }
