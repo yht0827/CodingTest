@@ -6,23 +6,25 @@ public class String2 {
 
         StringBuilder sb = new StringBuilder();
         StringBuilder result = new StringBuilder();
-        int openBrace = 0;
+        int open = 0;
 
         for (char c : str.toCharArray()) {
             if (c == '(') {
-                openBrace++;
-
+                open++;
             } else if (c == ')') {
-                if (openBrace == 0) continue;
-                openBrace--;
+                if (open == 0) continue;
+                open--;
             }
             sb.append(c);
         }
 
+        // 뒤에서 부터 for문으로 해야 "()(" 와 같은 문자열 처리 가능
         for (int i = sb.length() - 1; i >= 0; i--) {
-            if (sb.charAt(i) == '(' && openBrace-- > 0) continue;
+            // 쌍이 아닌 남는 '(' 처리
+            if (sb.charAt(i) == '(' && open-- > 0) continue;
             result.append(sb.charAt(i));
         }
+
         return result.reverse().toString();
     }
 
