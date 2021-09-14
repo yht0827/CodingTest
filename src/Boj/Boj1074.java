@@ -8,9 +8,7 @@ public class Boj1074 {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
     static int N, r, c;
-    static int answer;
-    static int count;
-    static boolean flag;
+    static int answer,count;
 
     public static void main(String[] args) throws IOException {
 
@@ -31,14 +29,8 @@ public class Boj1074 {
 
     public static void work(int x, int y, int arrLen) {
 
-        if (flag) return;
-
-        if (arrLen == 1) {
-            if (x == r && y == c) {
-                answer = count;
-                flag = true;
-            }
-            count++;
+        if (x == r && y == c) {
+            answer = count;
             return;
         }
 
