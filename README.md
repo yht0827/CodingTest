@@ -4,6 +4,6 @@
 
 - [x] Boj 
 - [x] Programmers
--  [ ] SWEA
+- [x] SWEA
 
 ## Links : [MyPage](https://ht.oopy.io/ps)
