@@ -128,15 +128,15 @@ public class 광고삽입 {
 
         // 2. 가까운 이벤트에 걸릴 때 마다 광고 시간 동안의 누적 시청자 수 구하기 Sum = Sum - A + B
         while (advStartTime <= endTime - adTime && endIndex + 1 < list.size()) {
-            int delta1 = list.get(startIndex + 1).x - advStartTime;
-            int delta2 = list.get(endIndex + 1).x - (advStartTime + adTime);
+            int delta1 = list.get(startIndex + 1).x - advStartTime; // 광고 시작 시간 이벤트 간격
+            int delta2 = list.get(endIndex + 1).x - (advStartTime + adTime); // 광고 끝 시간 이벤트 간격
             if (delta1 <= delta2) { // 시작 구간이 다음 event에 더 가까운 경우
-                sumViews += (long) (endViews - startViews) * delta1;
+                sumViews += (long) (endViews - startViews) * delta1; // 시청자 수 * 시간 간격
                 startViews += list.get(startIndex + 1).y;
                 startIndex++;
                 advStartTime += delta1;
             } else {
-                sumViews += (long) (endViews - startViews) * delta2;
+                sumViews += (long) (endViews - startViews) * delta2; // 시청자 수 * 시간 간격
                 endViews += list.get(endIndex + 1).y;
                 endIndex++;
                 advStartTime += delta2;
