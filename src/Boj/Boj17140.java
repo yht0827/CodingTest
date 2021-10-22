@@ -1,30 +1,36 @@
 package Boj;
 
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.*;
+
 
 public class Boj17140 {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringTokenizer st;
-    static int R, C, T;
-    static int[][] map;
-    static int sum;
-    static int[][] dir = {{0, -1}, {0, 1}, {-1, 0}, {1, 0}};
-    static Queue<Dust> q = new LinkedList<>();
-    static List<Integer> cleaner = new ArrayList<>();
+    static int r, c, k, time, x = 3, y = 3;
+    static int[][] arr = new int[101][101];
 
-    static class Dust {
-        int x;
-        int y;
-        int size;
+    static class Pair implements Comparable<Pair> {
 
-        public Dust(int x, int y, int size) {
-            super();
-            this.x = x;
-            this.y = y;
-            this.size = size;
+        int num;
+        int count;
+
+        public Pair(int num, int count) {
+            this.num = num;
+            this.count = count;
+        }
+
+        @Override
+        public int compareTo(Pair o) {
+            if (this.count > o.count) {
+                return 1;
+            } else if (this.count == o.count) {
+                return this.num - o.num;
+            }
+            return -1;
         }
     }
 
@@ -32,104 +38,97 @@ public class Boj17140 {
 
         st = new StringTokenizer(br.readLine());
 
-        R = Integer.parseInt(st.nextToken());
-        C = Integer.parseInt(st.nextToken());
-        T = Integer.parseInt(st.nextToken());
-        map = new int[R][C];
+        r = Integer.parseInt(st.nextToken());
+        c = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < R; i++) {
+        for (int i = 1; i <= x; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < C; j++) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-                if (map[i][j] > 0) {
-                    q.offer(new Dust(i, j, map[i][j]));
-                } else if (map[i][j] == -1) {
-                    cleaner.add(i);
-                }
+            for (int j = 1; j <= y; j++) {
+                arr[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        while (T > 0) {
-            while (!q.isEmpty()) {
-                Dust d = q.poll();
+        calc();
 
-                int cnt = 0;
-                for (int i = 0; i < 4; i++) {
-                    int dx = d.x + dir[i][0];
-                    int dy = d.y + dir[i][1];
+        if (time > 100)
+            time = -1;
 
-                    if (dx >= 0 && dy >= 0 && dx < R && dy < C && map[dx][dy] >= 0) {
-                        map[dx][dy] += d.size / 5;
-                        cnt++;
-                    }
-                }
-                map[d.x][d.y] -= d.size / 5 * cnt;
-            }
-            T--;
-
-            moveCleaner();
-
-            for (int i = 0; i < R; i++) {
-                for (int j = 0; j < C; j++) {
-                    if (map[i][j] > 0) {
-                        q.offer(new Dust(i, j, map[i][j]));
-                    }
-                }
-            }
-        }
-
-        // 개수 합
-        for (int i = 0; i < R; i++) {
-            for (int j = 0; j < C; j++) {
-                if (map[i][j] > 0)
-                    sum += map[i][j];
-            }
-        }
-        System.out.println(sum);
+        System.out.println(time);
     }
 
-    public static void moveCleaner() {
+    public static void calc() {
 
-        int top = cleaner.get(0);
+        while (time <= 100) {
 
-        for (int x = top - 1; x > 0; x--) {
-            map[x][0] = map[x - 1][0];
+            if (arr[r][c] == k) {
+                break;
+            }
+
+            if (x >= y) {
+                for (int i = 1; i <= x; i++) {
+                    R(i);
+                }
+            } else {
+                for (int i = 1; i <= y; i++) {
+                    C(i);
+                }
+            }
+            time++;
+        }
+    }
+
+    public static void R(int i) {
+        Queue<Pair> q = new PriorityQueue<>();
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int j = 1; j <= y; j++) {
+            if (arr[i][j] != 0)
+                map.compute(arr[i][j], (k, v) -> v == null ? 1 : v + 1);
         }
 
-        for (int y = 0; y < C - 1; y++) {
-            map[0][y] = map[0][y + 1];
+        map.forEach((k, v) -> q.add(new Pair(k, v)));
+
+        int num = 1;
+
+        while (!q.isEmpty()) {
+            Pair p = q.poll();
+            arr[i][num++] = p.num;
+            arr[i][num++] = p.count;
         }
 
-        for (int x = 0; x < top; x++) {
-            map[x][C - 1] = map[x + 1][C - 1];
+        y = Math.max(y, num);
+
+        while (num <= 99) {
+            arr[i][num++] = 0;
+            arr[i][num++] = 0;
+        }
+    }
+
+    public static void C(int j) {
+        Queue<Pair> q = new PriorityQueue<>();
+        Map<Integer, Integer> map = new HashMap<>();
+
+        for (int i = 1; i <= x; i++) {
+            if (arr[i][j] != 0)
+                map.compute(arr[i][j], (k, v) -> v == null ? 1 : v + 1);
         }
 
-        for (int y = C - 1; y > 1; y--) {
-            map[top][y] = map[top][y - 1];
+        map.forEach((k, v) -> q.add(new Pair(k, v)));
+
+        int num = 1;
+        while (!q.isEmpty()) {
+            Pair p = q.poll();
+            arr[num++][j] = p.num;
+            arr[num++][j] = p.count;
         }
 
-        map[top][1] = 0;
+        x = Math.max(x, num);
 
-        int bottom = cleaner.get(1);
-
-        for (int x = bottom + 1; x < R - 1; x++) {
-            map[x][0] = map[x + 1][0];
+        while (num <= 99) {
+            arr[num++][j] = 0;
+            arr[num++][j] = 0;
         }
-
-        for (int y = 0; y < C - 1; y++) {
-            map[R - 1][y] = map[R - 1][y + 1];
-        }
-
-        for (int x = R - 1; x > bottom; x--) {
-            map[x][C - 1] = map[x - 1][C - 1];
-        }
-
-        for (int y = C - 1; y > 1; y--) {
-            map[bottom][y] = map[bottom][y - 1];
-        }
-
-        map[bottom][1] = 0;
-
     }
 
 }
