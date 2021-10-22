@@ -2,6 +2,7 @@ package Boj;
 
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
@@ -10,8 +11,9 @@ public class Boj17140 {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringTokenizer st;
-    static int r, c, k, time, x = 3, y = 3;
-    static int[][] arr = new int[101][101];
+    static int r, c, k, time;
+    static int x = 3, y = 3;
+    static int[][] map = new int[101][101];
 
     static class Pair implements Comparable<Pair> {
 
@@ -34,7 +36,8 @@ public class Boj17140 {
         }
     }
 
-    public static void main(String[] args) throws Exception {
+
+    public static void main(String[] args) throws IOException {
 
         st = new StringTokenizer(br.readLine());
 
@@ -45,33 +48,29 @@ public class Boj17140 {
         for (int i = 1; i <= x; i++) {
             st = new StringTokenizer(br.readLine());
             for (int j = 1; j <= y; j++) {
-                arr[i][j] = Integer.parseInt(st.nextToken());
+                map[i][j] = Integer.parseInt(st.nextToken());
             }
         }
 
-        calc();
+        func();
 
-        if (time > 100)
-            time = -1;
+        if (time > 100) time = -1;
 
         System.out.println(time);
     }
 
-    public static void calc() {
+    public static void func() {
 
-        while (time <= 100) {
-
-            if (arr[r][c] == k) {
-                break;
-            }
+        for (int i = 0; i <= 100; i++) {
+            if (map[r][c] == k) break;
 
             if (x >= y) {
-                for (int i = 1; i <= x; i++) {
-                    R(i);
+                for (int j = 1; j <= x; j++) {
+                    R(j);
                 }
             } else {
-                for (int i = 1; i <= y; i++) {
-                    C(i);
+                for (int j = 1; j <= y; j++) {
+                    C(j);
                 }
             }
             time++;
@@ -79,56 +78,54 @@ public class Boj17140 {
     }
 
     public static void R(int i) {
-        Queue<Pair> q = new PriorityQueue<>();
-        Map<Integer, Integer> map = new HashMap<>();
+        Queue<Pair> pq = new PriorityQueue<>();
+        Map<Integer, Integer> arr = new HashMap<>();
 
         for (int j = 1; j <= y; j++) {
-            if (arr[i][j] != 0)
-                map.compute(arr[i][j], (k, v) -> v == null ? 1 : v + 1);
+            if (map[i][j] > 0) {
+                arr.compute(map[i][j], (k, v) -> v == null ? 1 : v + 1);
+            }
         }
 
-        map.forEach((k, v) -> q.add(new Pair(k, v)));
+        arr.forEach((k, v) -> pq.offer(new Pair(k, v)));
+
 
         int num = 1;
-
-        while (!q.isEmpty()) {
-            Pair p = q.poll();
-            arr[i][num++] = p.num;
-            arr[i][num++] = p.count;
+        while (!pq.isEmpty()) {
+            Pair poll = pq.poll();
+            map[i][num++] = poll.num;
+            map[i][num++] = poll.count;
         }
 
         y = Math.max(y, num);
 
-        while (num <= 99) {
-            arr[i][num++] = 0;
-            arr[i][num++] = 0;
-        }
+        for (int j = num; j <= 100; j++)
+            map[i][j] = 0;
     }
 
     public static void C(int j) {
-        Queue<Pair> q = new PriorityQueue<>();
-        Map<Integer, Integer> map = new HashMap<>();
+        Queue<Pair> pq = new PriorityQueue<>();
+        Map<Integer, Integer> arr = new HashMap<>();
 
         for (int i = 1; i <= x; i++) {
-            if (arr[i][j] != 0)
-                map.compute(arr[i][j], (k, v) -> v == null ? 1 : v + 1);
+            if (map[i][j] > 0) {
+                arr.compute(map[i][j], (k, v) -> v == null ? 1 : v + 1);
+            }
         }
 
-        map.forEach((k, v) -> q.add(new Pair(k, v)));
+        arr.forEach((k, v) -> pq.offer(new Pair(k, v)));
 
         int num = 1;
-        while (!q.isEmpty()) {
-            Pair p = q.poll();
-            arr[num++][j] = p.num;
-            arr[num++][j] = p.count;
+        while (!pq.isEmpty()) {
+            Pair poll = pq.poll();
+            map[num++][j] = poll.num;
+            map[num++][j] = poll.count;
         }
 
         x = Math.max(x, num);
 
-        while (num <= 99) {
-            arr[num++][j] = 0;
-            arr[num++][j] = 0;
-        }
+        for (int i = num; i <= 100; i++)
+            map[i][j] = 0;
     }
 
 }
