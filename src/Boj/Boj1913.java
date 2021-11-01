@@ -1,13 +1,15 @@
 package Boj;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Boj1913 {
 
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static StringBuilder sb = new StringBuilder();
     static int N, M;
     static int[][] map;
 
@@ -23,28 +25,26 @@ public class Boj1913 {
 
         int startX = N / 2;
         int startY = N / 2;
-        map[startX][startY] = 1;
-        int cnt = 2;
-        int p = 1;
+        int cnt = 1;
         int sw = -1;
+        int p = 1;
+        map[startX][startY] = cnt++;
 
-        // 1. 상 -1 우 +1  2. 하 +1 좌 -1
         while (true) {
 
             for (int i = 0; i < p; i++) {
-                startX = startX + sw;
+                startX += sw;
                 if (startX < 0) break;
-
                 map[startX][startY] = cnt++;
             }
 
-            sw *= -1;
-
             if (p == N) break;
 
-            for (int i = 0; i < p; i++) {
+            sw *= -1;
 
-                startY = startY + sw;
+
+            for (int i = 0; i < p; i++) {
+                startY += sw;
                 map[startX][startY] = cnt++;
             }
 
@@ -55,20 +55,18 @@ public class Boj1913 {
 
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                bw.write(map[i][j] + " ");
+                sb.append(map[i][j] + " ");
                 if (map[i][j] == M) {
                     x = i;
                     y = j;
                 }
             }
-            bw.write("\n");
+            sb.append("\n");
         }
 
-        bw.write((x + 1) + " " + (y + 1) + "\n");
+        sb.append((x + 1) + " " + (y + 1) + "\n");
 
-        br.close();
-        bw.flush();
-        bw.close();
+        System.out.println(sb);
     }
 
 }
