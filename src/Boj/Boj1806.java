@@ -22,24 +22,18 @@ public class Boj1806 {
             arr[i] = Integer.parseInt(st.nextToken());
         }
 
-        int left = 0, right = 0, sum = 0, answer = Integer.MAX_VALUE;
+        int left = 0, right = 0, sum = 0, length = Integer.MAX_VALUE;
 
         while (true) {
-            if (sum >= S) {
-                sum -= arr[left];
-                answer = Math.min(answer, right - left++);
-            } else if (right == N) {
-                break;
-            } else {
+            if (sum < S) {
                 sum += arr[right++];
+            } else if (right == N) break;
+            else {
+                sum -= arr[left];
+                length = Math.min(length, right - left++);
             }
         }
 
-        if (answer == Integer.MAX_VALUE) {
-            System.out.println(0);
-        } else {
-            System.out.println(answer);
-        }
-
+        System.out.println(length == Integer.MAX_VALUE ? 0 : length);
     }
 }
