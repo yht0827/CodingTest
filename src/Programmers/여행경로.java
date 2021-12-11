@@ -17,16 +17,18 @@ public class 여행경로 {
     static List<String> list = new ArrayList<>();
     static boolean[] check;
 
+
     private static String[] solution(String[][] tickets) {
 
         int len = tickets.length;
         check = new boolean[len];
-        dfs(0, len, "ICN", "ICN", tickets);
+        String sWord = "ICN";
+
+        dfs(0, len, sWord, sWord, tickets);
 
         Collections.sort(list);
 
         return list.get(0).split(" ");
-
     }
 
     public static void dfs(int cnt, int len, String word, String str, String[][] tickets) {
