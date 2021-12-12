@@ -42,7 +42,7 @@ public class Boj10971 {
 
             if (W[now][i] > 0) {
 
-                if (i == start && idx == N) {
+                if (i == start && idx == N - 1) {
                     cost += W[now][i];
                     backTrack(start, i, idx + 1, cost);
 
