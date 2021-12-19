@@ -25,14 +25,6 @@ public class Boj4386 {
             return Double.compare(w, o.w);
         }
 
-        @Override
-        public String toString() {
-            return "Info{" +
-                    "s=" + s +
-                    ", e=" + e +
-                    ", w=" + w +
-                    '}';
-        }
     }
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
