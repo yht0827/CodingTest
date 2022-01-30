@@ -39,18 +39,15 @@ public class Boj2042 {
                     + sum(node * 2 + 1, (start + end) / 2 + 1, end, left, right);
         }
 
-        public void update(int node, int start, int end, int idx, long diff) {
+        public long update(int node, int start, int end, int idx, long diff) {
 
-            if (idx < start || idx > end) return;
+            if (idx < start || idx > end) return tree[node];
 
-            tree[node] += diff;
+            if (start == end) return tree[node] = diff;
 
-            if (start != end) {
-                update(node * 2, start, (start + end) / 2, idx, diff);
-                update(node * 2 + 1, (start + end) / 2 + 1, end, idx, diff);
-            }
+            return tree[node] = update(node * 2, start, (start + end) / 2, idx, diff) +
+                    update(node * 2 + 1, (start + end) / 2 + 1, end, idx, diff);
         }
-
     }
 
     public static void main(String[] args) throws IOException {
@@ -76,10 +73,10 @@ public class Boj2042 {
             long c = Long.parseLong(st.nextToken());
 
             if (a == 1) {
-                segTree.update(1, 1, N, b, c - arr[b]);
+                segTree.update(1, 1, N, b, c);
                 arr[b] = c;
             } else {
-                sb.append(segTree.sum(1, 1, N, b, (int)c)).append("\n");
+                sb.append(segTree.sum(1, 1, N, b, (int) c)).append("\n");
             }
         }
         System.out.println(sb);
