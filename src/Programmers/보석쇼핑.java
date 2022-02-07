@@ -2,7 +2,7 @@ package Programmers;
 
 import java.util.*;
 
-public class 핑보석쇼핑 {
+public class 보석쇼핑 {
 
     public static void main(String[] args) {
 
